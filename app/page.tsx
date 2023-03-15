@@ -1,91 +1,57 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
+import TaskList from "@/components/Tasks/TaskList";
+import Response from "@/lib/models/Response";
+import ITask from "@/lib/models/Task";
+import ITaskList from "@/lib/models/Task";
+import supabase from "@/lib/supabaseClient";
 
-const inter = Inter({ subsets: ['latin'] })
+async function getParentTasks(
+  from: number,
+  to: number
+): Promise<Response<{ tasks: ITask[]; count: number }>> {
+  let { data, error, count } = await supabase
+    .from("tasks")
+    .select("*", {
+      count: "exact",
+    })
+    .is("parentTaskId", null)
+    .range(from, to);
+  if (error)
+    return {
+      model: {
+        tasks: [],
+        count: 0,
+      },
+      errors: [],
+      success: false,
+    };
+  return {
+    model: { tasks: data as ITaskList[], count: count ?? 0 },
+    errors: [],
+    success: true,
+  };
+}
+async function getTasks() {
+  return await getParentTasks(0, 12);
+}
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
+export default async function Home() {
+  const data = await getTasks();
+  if (data.model && data.errors.length <= 0)
+    return (
+      <div>
+        <TaskList data={data.model}></TaskList>
+      </div>
+    );
+  else
+    return (
+      <div>
+        <h1>Tasks</h1>
+        <p>No tasks have been found.</p>
         <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+          {data.errors.map((err, k) => (
+            <p key={k}>{err}</p>
+          ))}
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    );
 }
