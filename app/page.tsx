@@ -37,11 +37,7 @@ async function getTasks() {
 export default async function Home() {
   const data = await getTasks();
   if (data.model && data.errors.length <= 0)
-    return (
-      <div>
-        <TaskList data={data.model}></TaskList>
-      </div>
-    );
+    return <TaskList data={data.model}></TaskList>;
   else
     return (
       <div>

@@ -96,14 +96,14 @@ export default function TaskDetails({
           onClick={toggleIsOpen}
           className="bg-black/50 w-full h-full fixed top-0 left-0 transition-all"
         ></div>
-        <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-full sm:w-2/3 lg:w-1/2 min-h-56 max-h-[700px] p-8 sm:pt-6 rounded-lg bg-white shadow-lg border-2 border-gray-300">
+        <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-full sm:w-2/3 lg:w-1/3 min-h-56 max-h-[700px] p-8 sm:pt-6 rounded-lg bg-white dark:bg-gray-900 shadow-lg border-2 border-gray-300 dark:border-gray-700">
           <div className="flex justify-end w-full">
             {/* <button className="p-1 ml-auto hover:bg-gray-200 rounded-full">
               <TiPencil className="rotate-45" />
             </button> */}
             <button
               onClick={toggleIsOpen}
-              className="p-1 ml-2 hover:bg-gray-200 rounded-full"
+              className="p-1 ml-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full"
             >
               <TiPlus className="rotate-45" />
             </button>
@@ -124,14 +124,14 @@ export default function TaskDetails({
             {subtasks?.model?.tasks.map((task: ITaskList) => {
               return (
                 <li
-                  className="w-full flex hover:bg-gray-200 rounded-lg"
+                  className="w-full flex hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg"
                   key={task?.id}
                 >
                   <button
                     onClick={() => toggleTaskComplete(task)}
                     className="w-full text-left py-1 px-2 flex items-center"
                   >
-                    <div className="flex w-6 h-6 items-center justify-center border-2 border-gray-300 rounded-md">
+                    <div className="flex w-6 h-6 items-center justify-center border-2 border-gray-300 dark:border-gray-600 rounded-md">
                       {task.completed && (
                         <TiTick className="w-full h-full text-lime-600" />
                       )}

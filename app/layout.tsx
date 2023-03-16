@@ -15,8 +15,8 @@ export default function RootLayout({
   const [colorMode, setColorMode] = useState("light");
   function toggleColorMode() {
     const newColorMode = colorMode === "light" ? "dark" : "light";
-    window.localStorage.setItem("theme", newColorMode);
     setColorMode(newColorMode);
+    window.localStorage.setItem("theme", newColorMode);
   }
 
   useEffect(() => {
@@ -34,9 +34,7 @@ export default function RootLayout({
         className={
           montserrat.className +
           ` ${
-            colorMode === "dark"
-              ? "dark dark:bg-gray-900 text-gray-200"
-              : "bg-white"
+            colorMode === "dark" ? "dark bg-gray-900 text-gray-200" : "bg-white"
           }`
         }
       >

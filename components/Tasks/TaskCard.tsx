@@ -1,4 +1,3 @@
-"use client";
 import ITask from "@/lib/models/Task";
 import ITaskList from "@/lib/models/Task";
 
